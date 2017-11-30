@@ -141,6 +141,24 @@ public indirect enum List<T> {
             return tail
         }
     }
+    
+}
+
+/// == returns true if all elements are equal and in the same order
+/// Complexity: O(n)
+public func ==<T>(lhs: List<T>, rhs: List<T>) -> Bool where T: Equatable {
+    for (e1, e2) in zip(lhs, rhs) {
+        guard e1 == e2 else {
+            return false
+        }
+    }
+    return true
+}
+
+/// == returns true if all elements are equal and in the same order
+/// Complexity: O(n)
+public func ~=<T>(lhs: List<T>, rhs: List<T>) -> Bool where T: Equatable {
+    return lhs == rhs
 }
 
 extension List: ExpressibleByArrayLiteral {
@@ -176,3 +194,17 @@ extension List: CustomStringConvertible {
     }
 }
 
+extension List: Sequence, IteratorProtocol {
+    public func makeIterator() -> List {
+        return self
+    }
+    
+    public mutating func next() -> T? {
+        switch self {
+        case .empty: return nil
+        case let .cons(head, tail):
+            self = tail
+            return head
+        }
+    }
+}
